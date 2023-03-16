@@ -1021,6 +1021,15 @@ resource "aws_security_group" "nodes-k8s-shadowinc-xyz" {
   vpc_id = aws_vpc.k8s-shadowinc-xyz.id
 }
 
+resource "aws_security_group_rule" "from-0-0-0-0--0-ingress-tcp-443to443-masters-k8s-shadowinc-xyz" {
+  cidr_blocks       = ["0.0.0.0/0"]
+  from_port         = 443
+  protocol          = "tcp"
+  security_group_id = aws_security_group.masters-k8s-shadowinc-xyz.id
+  to_port           = 443
+  type              = "ingress"
+}
+
 resource "aws_security_group_rule" "from-52-203-245-53--32-ingress-tcp-22to22-masters-k8s-shadowinc-xyz" {
   cidr_blocks       = ["52.203.245.53/32"]
   from_port         = 22
@@ -1036,15 +1045,6 @@ resource "aws_security_group_rule" "from-52-203-245-53--32-ingress-tcp-22to22-no
   protocol          = "tcp"
   security_group_id = aws_security_group.nodes-k8s-shadowinc-xyz.id
   to_port           = 22
-  type              = "ingress"
-}
-
-resource "aws_security_group_rule" "from-52-203-245-53--32-ingress-tcp-443to443-masters-k8s-shadowinc-xyz" {
-  cidr_blocks       = ["52.203.245.53/32"]
-  from_port         = 443
-  protocol          = "tcp"
-  security_group_id = aws_security_group.masters-k8s-shadowinc-xyz.id
-  to_port           = 443
   type              = "ingress"
 }
 

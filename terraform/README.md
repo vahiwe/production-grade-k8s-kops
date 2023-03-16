@@ -117,6 +117,8 @@ terraform init
 ```bash
 terraform apply
 ```
+Wait a few minutes for the cluster to be built.
+Once the cluster is built, you can verify it's running by running the next step.
 
 13. Validate and update the cluster
 After running the `terraform apply` command, you can validate the cluster by running:
