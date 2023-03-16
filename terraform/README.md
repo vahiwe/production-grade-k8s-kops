@@ -164,6 +164,11 @@ Kops has a number of addons that can be installed on the cluster.
 To install an addon, run the following command, go to the [Kops Addons](https://kops.sigs.k8s.io/addons) page, and find the addon you want to install.
 Most addons are installed by updating the cluster configuration file and running the `kops edit cluster` command, the `kops update cluster` command, and the `terraform apply` command.
 
+Some updates might require a rolling update of the cluster. To do this, run the following command:
+```bash
+kops rolling-update cluster --state ${KOPS_STATE_STORE} --name ${NAME} --yes
+```
+
 ## References
 - https://kops.sigs.k8s.io/getting_started/install/
 - [Kops Addons](https://kops.sigs.k8s.io/addons)

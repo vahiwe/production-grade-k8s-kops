@@ -2,13 +2,15 @@ apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
   creationTimestamp: "2023-03-16T10:57:28Z"
-  generation: 2
+  generation: 3
   name: k8s.shadowinc.xyz
 spec:
   api:
     dns: {}
   authorization:
     rbac: {}
+  awsLoadBalancerController:
+    enabled: true
   certManager:
     enabled: true
     hostedZoneIDs:
