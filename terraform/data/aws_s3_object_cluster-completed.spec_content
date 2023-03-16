@@ -2,9 +2,25 @@ apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
   creationTimestamp: "2023-03-16T10:57:28Z"
-  generation: 4
+  generation: 5
   name: k8s.shadowinc.xyz
 spec:
+  additionalPolicies:
+    master: |
+      [
+        {
+          "Effect": "Allow",
+          "Action": "iam:CreateServiceLinkedRole",
+          "Resource": "arn:aws:iam::*:role/aws-service-role/*"
+         },
+         {
+           "Effect": "Allow",
+           "Action": [
+              "elasticloadbalancing:ModifyLoadBalancerAttributes"
+            ],
+           "Resource": "*"
+         }
+      ]
   api:
     dns: {}
   authorization:
