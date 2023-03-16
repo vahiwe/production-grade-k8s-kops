@@ -4,6 +4,8 @@ locals {
   iam_openid_connect_provider_issuer                 = "kops-476621737173.s3.us-east-1.amazonaws.com/k8s.shadowinc.xyz/discovery/k8s.shadowinc.xyz"
   kube-system-aws-cloud-controller-manager_role_arn  = aws_iam_role.aws-cloud-controller-manager-kube-system-sa-k8s-shadowinc-xyz.arn
   kube-system-aws-cloud-controller-manager_role_name = aws_iam_role.aws-cloud-controller-manager-kube-system-sa-k8s-shadowinc-xyz.name
+  kube-system-cert-manager_role_arn                  = aws_iam_role.cert-manager-kube-system-sa-k8s-shadowinc-xyz.arn
+  kube-system-cert-manager_role_name                 = aws_iam_role.cert-manager-kube-system-sa-k8s-shadowinc-xyz.name
   kube-system-dns-controller_role_arn                = aws_iam_role.dns-controller-kube-system-sa-k8s-shadowinc-xyz.arn
   kube-system-dns-controller_role_name               = aws_iam_role.dns-controller-kube-system-sa-k8s-shadowinc-xyz.name
   kube-system-ebs-csi-controller-sa_role_arn         = aws_iam_role.ebs-csi-controller-sa-kube-system-sa-k8s-shadowinc-xyz.arn
@@ -46,6 +48,14 @@ output "kube-system-aws-cloud-controller-manager_role_arn" {
 
 output "kube-system-aws-cloud-controller-manager_role_name" {
   value = aws_iam_role.aws-cloud-controller-manager-kube-system-sa-k8s-shadowinc-xyz.name
+}
+
+output "kube-system-cert-manager_role_arn" {
+  value = aws_iam_role.cert-manager-kube-system-sa-k8s-shadowinc-xyz.arn
+}
+
+output "kube-system-cert-manager_role_name" {
+  value = aws_iam_role.cert-manager-kube-system-sa-k8s-shadowinc-xyz.name
 }
 
 output "kube-system-dns-controller_role_arn" {
@@ -417,6 +427,18 @@ resource "aws_iam_role" "aws-cloud-controller-manager-kube-system-sa-k8s-shadowi
   }
 }
 
+resource "aws_iam_role" "cert-manager-kube-system-sa-k8s-shadowinc-xyz" {
+  assume_role_policy = file("${path.module}/data/aws_iam_role_cert-manager.kube-system.sa.k8s.shadowinc.xyz_policy")
+  name               = "cert-manager.kube-system.sa.k8s.shadowinc.xyz"
+  tags = {
+    "KubernetesCluster"                       = "k8s.shadowinc.xyz"
+    "Name"                                    = "cert-manager.kube-system.sa.k8s.shadowinc.xyz"
+    "kubernetes.io/cluster/k8s.shadowinc.xyz" = "owned"
+    "service-account.kops.k8s.io/name"        = "cert-manager"
+    "service-account.kops.k8s.io/namespace"   = "kube-system"
+  }
+}
+
 resource "aws_iam_role" "dns-controller-kube-system-sa-k8s-shadowinc-xyz" {
   assume_role_policy = file("${path.module}/data/aws_iam_role_dns-controller.kube-system.sa.k8s.shadowinc.xyz_policy")
   name               = "dns-controller.kube-system.sa.k8s.shadowinc.xyz"
@@ -465,6 +487,12 @@ resource "aws_iam_role_policy" "aws-cloud-controller-manager-kube-system-sa-k8s-
   name   = "aws-cloud-controller-manager.kube-system.sa.k8s.shadowinc.xyz"
   policy = file("${path.module}/data/aws_iam_role_policy_aws-cloud-controller-manager.kube-system.sa.k8s.shadowinc.xyz_policy")
   role   = aws_iam_role.aws-cloud-controller-manager-kube-system-sa-k8s-shadowinc-xyz.name
+}
+
+resource "aws_iam_role_policy" "cert-manager-kube-system-sa-k8s-shadowinc-xyz" {
+  name   = "cert-manager.kube-system.sa.k8s.shadowinc.xyz"
+  policy = file("${path.module}/data/aws_iam_role_policy_cert-manager.kube-system.sa.k8s.shadowinc.xyz_policy")
+  role   = aws_iam_role.cert-manager-kube-system-sa-k8s-shadowinc-xyz.name
 }
 
 resource "aws_iam_role_policy" "dns-controller-kube-system-sa-k8s-shadowinc-xyz" {
@@ -883,6 +911,13 @@ resource "aws_s3_object" "k8s-shadowinc-xyz-addons-bootstrap" {
   bucket   = "kops-476621737173"
   content  = file("${path.module}/data/aws_s3_object_k8s.shadowinc.xyz-addons-bootstrap_content")
   key      = "k8s.shadowinc.xyz/addons/bootstrap-channel.yaml"
+  provider = aws.files
+}
+
+resource "aws_s3_object" "k8s-shadowinc-xyz-addons-certmanager-io-k8s-1-16" {
+  bucket   = "kops-476621737173"
+  content  = file("${path.module}/data/aws_s3_object_k8s.shadowinc.xyz-addons-certmanager.io-k8s-1.16_content")
+  key      = "k8s.shadowinc.xyz/addons/certmanager.io/k8s-1.16.yaml"
   provider = aws.files
 }
 

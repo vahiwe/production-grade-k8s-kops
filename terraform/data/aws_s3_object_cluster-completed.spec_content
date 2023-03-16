@@ -2,13 +2,17 @@ apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
   creationTimestamp: "2023-03-16T10:57:28Z"
-  generation: 1
+  generation: 2
   name: k8s.shadowinc.xyz
 spec:
   api:
     dns: {}
   authorization:
     rbac: {}
+  certManager:
+    enabled: true
+    hostedZoneIDs:
+    - Z06352133LLCSB2NKX1D5
   channel: stable
   cloudConfig:
     awsEBSCSIDriver:
