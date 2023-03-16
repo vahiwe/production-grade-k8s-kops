@@ -1,0 +1,51 @@
+Assets:
+  amd64:
+  - e6dd2ee432a093492936ff8505f084b5ed41662f50231f1c11ae08ee8582a3f5@https://storage.googleapis.com/kubernetes-release/release/v1.26.2/bin/linux/amd64/kubelet
+  - fcf86d21fb1a49b012bce7845cf00081d2dd7a59f424b28621799deceb5227b3@https://storage.googleapis.com/kubernetes-release/release/v1.26.2/bin/linux/amd64/kubectl
+  - 962100bbc4baeaaa5748cdbfce941f756b1531c2eadb290129401498bfac21e7@https://storage.googleapis.com/k8s-artifacts-cni/release/v0.9.1/cni-plugins-linux-amd64-v0.9.1.tgz
+  - c4e516376a2392520a87abea94baf2045cc3a67e9e0c90c75fb6ed038170561e@https://github.com/containerd/containerd/releases/download/v1.6.18/containerd-1.6.18-linux-amd64.tar.gz
+  - db772be63147a4e747b4fe286c7c16a2edc4a8458bd3092ea46aaee77750e8ce@https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.amd64
+  arm64:
+  - 33e77f93d141d3b9e207ae50ff050186dea084ac26f9ec88280f85bab9dad310@https://storage.googleapis.com/kubernetes-release/release/v1.26.2/bin/linux/arm64/kubelet
+  - 291e85bef77e8440205c873686e9938d7f87c0534e9a491de64e3cc0584295b6@https://storage.googleapis.com/kubernetes-release/release/v1.26.2/bin/linux/arm64/kubectl
+  - ef17764ffd6cdcb16d76401bac1db6acc050c9b088f1be5efa0e094ea3b01df0@https://storage.googleapis.com/k8s-artifacts-cni/release/v0.9.1/cni-plugins-linux-arm64-v0.9.1.tgz
+  - 56b83a0bc955edc5ebaa3bd0f788e654b63395be00fcb1bd03ff4bdfe4b5e1e7@https://github.com/containerd/containerd/releases/download/v1.6.18/containerd-1.6.18-linux-arm64.tar.gz
+  - dbb71e737eaef454a406ce21fd021bd8f1b35afb7635016745992bbd7c17a223@https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.arm64
+CAs: {}
+ClusterName: k8s.shadowinc.xyz
+Hooks:
+- null
+- null
+KeypairIDs:
+  kubernetes-ca: "7211096784796732368415698700"
+KubeletConfig:
+  anonymousAuth: false
+  cgroupDriver: systemd
+  cgroupRoot: /
+  cloudProvider: external
+  clusterDNS: 100.64.0.10
+  clusterDomain: cluster.local
+  enableDebuggingHandlers: true
+  evictionHard: memory.available<100Mi,nodefs.available<10%,nodefs.inodesFree<5%,imagefs.available<10%,imagefs.inodesFree<5%
+  featureGates:
+    CSIMigrationAWS: "true"
+    InTreePluginAWSUnregister: "true"
+  kubeconfigPath: /var/lib/kubelet/kubeconfig
+  logLevel: 2
+  nodeLabels:
+    node-role.kubernetes.io/node: ""
+  podInfraContainerImage: registry.k8s.io/pause:3.6@sha256:3d380ca8864549e74af4b29c10f9cb0956236dfb01c40ca076fb6c37253234db
+  podManifestPath: /etc/kubernetes/manifests
+  protectKernelDefaults: true
+  registerSchedulable: true
+  shutdownGracePeriod: 30s
+  shutdownGracePeriodCriticalPods: 10s
+UpdatePolicy: automatic
+channels:
+- s3://kops-476621737173/k8s.shadowinc.xyz/addons/bootstrap-channel.yaml
+containerdConfig:
+  logLevel: info
+  runc:
+    version: 1.1.4
+  version: 1.6.18
+useInstanceIDForNodeName: true

@@ -1,0 +1,18 @@
+{
+"issuer": "https://kops-476621737173.s3.us-east-1.amazonaws.com/k8s.shadowinc.xyz/discovery/k8s.shadowinc.xyz",
+"jwks_uri": "https://kops-476621737173.s3.us-east-1.amazonaws.com/k8s.shadowinc.xyz/discovery/k8s.shadowinc.xyz/openid/v1/jwks",
+"authorization_endpoint": "urn:kubernetes:programmatic_authorization",
+"response_types_supported": [
+"id_token"
+],
+"subject_types_supported": [
+"public"
+],
+"id_token_signing_alg_values_supported": [
+"RS256"
+],
+"claims_supported": [
+"sub",
+"iss"
+]
+}

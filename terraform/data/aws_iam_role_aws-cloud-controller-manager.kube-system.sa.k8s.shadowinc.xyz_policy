@@ -1,0 +1,17 @@
+{
+  "Statement": [
+    {
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "kops-476621737173.s3.us-east-1.amazonaws.com/k8s.shadowinc.xyz/discovery/k8s.shadowinc.xyz:sub": "system:serviceaccount:kube-system:aws-cloud-controller-manager"
+        }
+      },
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::476621737173:oidc-provider/kops-476621737173.s3.us-east-1.amazonaws.com/k8s.shadowinc.xyz/discovery/k8s.shadowinc.xyz"
+      }
+    }
+  ],
+  "Version": "2012-10-17"
+}

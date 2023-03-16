@@ -1,0 +1,256 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: "2023-03-16T10:57:28Z"
+  name: k8s.shadowinc.xyz
+spec:
+  api:
+    dns: {}
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudConfig:
+    awsEBSCSIDriver:
+      enabled: true
+      version: v1.14.1
+    manageStorageClasses: true
+  cloudControllerManager:
+    allocateNodeCIDRs: true
+    clusterCIDR: 100.64.0.0/10
+    clusterName: k8s.shadowinc.xyz
+    configureCloudRoutes: false
+    image: registry.k8s.io/provider-aws/cloud-controller-manager:v1.26.0
+    leaderElection:
+      leaderElect: true
+  cloudProvider: aws
+  clusterDNSDomain: cluster.local
+  configBase: s3://kops-476621737173/k8s.shadowinc.xyz
+  configStore: s3://kops-476621737173/k8s.shadowinc.xyz
+  containerRuntime: containerd
+  containerd:
+    logLevel: info
+    runc:
+      version: 1.1.4
+    version: 1.6.18
+  dnsZone: Z06352133LLCSB2NKX1D5
+  docker:
+    skipInstall: true
+  etcdClusters:
+  - backups:
+      backupStore: s3://kops-476621737173/k8s.shadowinc.xyz/backups/etcd/main
+    cpuRequest: 200m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1a
+      name: a
+    memoryRequest: 100Mi
+    name: main
+    version: 3.5.7
+  - backups:
+      backupStore: s3://kops-476621737173/k8s.shadowinc.xyz/backups/etcd/events
+    cpuRequest: 100m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1a
+      name: a
+    memoryRequest: 100Mi
+    name: events
+    version: 3.5.7
+  externalDns:
+    provider: dns-controller
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+    useServiceAccountExternalPermissions: true
+  keyStore: s3://kops-476621737173/k8s.shadowinc.xyz/pki
+  kubeAPIServer:
+    allowPrivileged: true
+    anonymousAuth: false
+    apiAudiences:
+    - kubernetes.svc.default
+    apiServerCount: 1
+    authorizationMode: Node,RBAC
+    bindAddress: 0.0.0.0
+    cloudProvider: external
+    enableAdmissionPlugins:
+    - NamespaceLifecycle
+    - LimitRanger
+    - ServiceAccount
+    - DefaultStorageClass
+    - DefaultTolerationSeconds
+    - MutatingAdmissionWebhook
+    - ValidatingAdmissionWebhook
+    - NodeRestriction
+    - ResourceQuota
+    etcdServers:
+    - https://127.0.0.1:4001
+    etcdServersOverrides:
+    - /events#https://127.0.0.1:4002
+    featureGates:
+      CSIMigrationAWS: "true"
+      InTreePluginAWSUnregister: "true"
+    image: registry.k8s.io/kube-apiserver:v1.26.2@sha256:0f03b93af45f39704b7da175db31e20da63d2ab369f350e59de8cbbef9d703e0
+    kubeletPreferredAddressTypes:
+    - InternalIP
+    - Hostname
+    - ExternalIP
+    logLevel: 2
+    requestheaderAllowedNames:
+    - aggregator
+    requestheaderExtraHeaderPrefixes:
+    - X-Remote-Extra-
+    requestheaderGroupHeaders:
+    - X-Remote-Group
+    requestheaderUsernameHeaders:
+    - X-Remote-User
+    securePort: 443
+    serviceAccountIssuer: https://kops-476621737173.s3.us-east-1.amazonaws.com/k8s.shadowinc.xyz/discovery/k8s.shadowinc.xyz
+    serviceAccountJWKSURI: https://kops-476621737173.s3.us-east-1.amazonaws.com/k8s.shadowinc.xyz/discovery/k8s.shadowinc.xyz/openid/v1/jwks
+    serviceClusterIPRange: 100.64.0.0/13
+    storageBackend: etcd3
+  kubeControllerManager:
+    allocateNodeCIDRs: true
+    attachDetachReconcileSyncPeriod: 1m0s
+    cloudProvider: external
+    clusterCIDR: 100.96.0.0/11
+    clusterName: k8s.shadowinc.xyz
+    configureCloudRoutes: false
+    featureGates:
+      CSIMigrationAWS: "true"
+      InTreePluginAWSUnregister: "true"
+    image: registry.k8s.io/kube-controller-manager:v1.26.2@sha256:5434d52f88eb16bc5e98ccb65e97e97cb5cf7861749afbf26174d27c4ece1fad
+    leaderElection:
+      leaderElect: true
+    logLevel: 2
+    useServiceAccountCredentials: true
+  kubeDNS:
+    cacheMaxConcurrent: 150
+    cacheMaxSize: 1000
+    cpuRequest: 100m
+    domain: cluster.local
+    memoryLimit: 170Mi
+    memoryRequest: 70Mi
+    nodeLocalDNS:
+      cpuRequest: 25m
+      enabled: false
+      image: registry.k8s.io/dns/k8s-dns-node-cache:1.22.16
+      memoryRequest: 5Mi
+    provider: CoreDNS
+    serverIP: 100.64.0.10
+  kubeProxy:
+    clusterCIDR: 100.96.0.0/11
+    cpuRequest: 100m
+    enabled: false
+    image: registry.k8s.io/kube-proxy:v1.26.2@sha256:5dac6611aceb1452a5d4036108a15ceb0699c083a942977e30640d521e7d2078
+    logLevel: 2
+  kubeScheduler:
+    featureGates:
+      CSIMigrationAWS: "true"
+      InTreePluginAWSUnregister: "true"
+    image: registry.k8s.io/kube-scheduler:v1.26.2@sha256:da109877fd8fd0feba2f9a4cb6a199797452c17ddcfaf7b023cf0bac09e51417
+    leaderElection:
+      leaderElect: true
+    logLevel: 2
+  kubelet:
+    anonymousAuth: false
+    cgroupDriver: systemd
+    cgroupRoot: /
+    cloudProvider: external
+    clusterDNS: 100.64.0.10
+    clusterDomain: cluster.local
+    enableDebuggingHandlers: true
+    evictionHard: memory.available<100Mi,nodefs.available<10%,nodefs.inodesFree<5%,imagefs.available<10%,imagefs.inodesFree<5%
+    featureGates:
+      CSIMigrationAWS: "true"
+      InTreePluginAWSUnregister: "true"
+    kubeconfigPath: /var/lib/kubelet/kubeconfig
+    logLevel: 2
+    podInfraContainerImage: registry.k8s.io/pause:3.6@sha256:3d380ca8864549e74af4b29c10f9cb0956236dfb01c40ca076fb6c37253234db
+    podManifestPath: /etc/kubernetes/manifests
+    protectKernelDefaults: true
+    registerSchedulable: true
+    shutdownGracePeriod: 30s
+    shutdownGracePeriodCriticalPods: 10s
+  kubernetesApiAccess:
+  - 52.203.245.53/32
+  kubernetesVersion: 1.26.2
+  masterKubelet:
+    anonymousAuth: false
+    cgroupDriver: systemd
+    cgroupRoot: /
+    cloudProvider: external
+    clusterDNS: 100.64.0.10
+    clusterDomain: cluster.local
+    enableDebuggingHandlers: true
+    evictionHard: memory.available<100Mi,nodefs.available<10%,nodefs.inodesFree<5%,imagefs.available<10%,imagefs.inodesFree<5%
+    featureGates:
+      CSIMigrationAWS: "true"
+      InTreePluginAWSUnregister: "true"
+    kubeconfigPath: /var/lib/kubelet/kubeconfig
+    logLevel: 2
+    podInfraContainerImage: registry.k8s.io/pause:3.6@sha256:3d380ca8864549e74af4b29c10f9cb0956236dfb01c40ca076fb6c37253234db
+    podManifestPath: /etc/kubernetes/manifests
+    protectKernelDefaults: true
+    registerSchedulable: true
+    shutdownGracePeriod: 30s
+    shutdownGracePeriodCriticalPods: 10s
+  masterPublicName: api.k8s.shadowinc.xyz
+  networkCIDR: 172.20.0.0/16
+  networking:
+    cilium:
+      agentPrometheusPort: 9090
+      bpfCTGlobalAnyMax: 262144
+      bpfCTGlobalTCPMax: 524288
+      bpfLBAlgorithm: random
+      bpfLBMaglevTableSize: "16381"
+      bpfLBMapMax: 65536
+      bpfNATGlobalMax: 524288
+      bpfNeighGlobalMax: 524288
+      bpfPolicyMapMax: 16384
+      clusterName: default
+      cpuRequest: 25m
+      disableCNPStatusUpdates: true
+      disableMasquerade: false
+      enableBPFMasquerade: false
+      enableEndpointHealthChecking: true
+      enableL7Proxy: true
+      enableNodePort: true
+      enableRemoteNodeIdentity: true
+      hubble:
+        enabled: false
+      identityAllocationMode: crd
+      identityChangeGracePeriod: 5s
+      ipam: kubernetes
+      memoryRequest: 128Mi
+      monitorAggregation: medium
+      sidecarIstioProxyImage: cilium/istio_proxy
+      toFqdnsDnsRejectResponseCode: refused
+      tunnel: vxlan
+      version: v1.12.5
+  nonMasqueradeCIDR: 100.64.0.0/10
+  podCIDR: 100.96.0.0/11
+  secretStore: s3://kops-476621737173/k8s.shadowinc.xyz/secrets
+  serviceAccountIssuerDiscovery:
+    discoveryStore: s3://kops-476621737173/k8s.shadowinc.xyz/discovery/k8s.shadowinc.xyz
+    enableAWSOIDCProvider: true
+  serviceClusterIPRange: 100.64.0.0/13
+  sshAccess:
+  - 52.203.245.53/32
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: us-east-1a
+    type: Public
+    zone: us-east-1a
+  - cidr: 172.20.64.0/19
+    name: us-east-1b
+    type: Public
+    zone: us-east-1b
+  - cidr: 172.20.96.0/19
+    name: us-east-1c
+    type: Public
+    zone: us-east-1c
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public

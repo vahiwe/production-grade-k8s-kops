@@ -1,0 +1,108 @@
+{
+  "Statement": [
+    {
+      "Action": "ec2:AttachVolume",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/KubernetesCluster": "k8s.shadowinc.xyz",
+          "aws:ResourceTag/k8s.io/role/master": "1"
+        }
+      },
+      "Effect": "Allow",
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Action": [
+        "s3:Get*"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::kops-476621737173/k8s.shadowinc.xyz/*"
+    },
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::kops-476621737173/k8s.shadowinc.xyz/backups/etcd/main/*"
+    },
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::kops-476621737173/k8s.shadowinc.xyz/backups/etcd/events/*"
+    },
+    {
+      "Action": [
+        "s3:GetBucketLocation",
+        "s3:GetEncryptionConfiguration",
+        "s3:ListBucket",
+        "s3:ListBucketVersions"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::kops-476621737173"
+      ]
+    },
+    {
+      "Action": [
+        "route53:ChangeResourceRecordSets",
+        "route53:ListResourceRecordSets",
+        "route53:GetHostedZone"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:route53:::hostedzone/Z06352133LLCSB2NKX1D5"
+      ]
+    },
+    {
+      "Action": [
+        "route53:GetChange"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:route53:::change/*"
+      ]
+    },
+    {
+      "Action": [
+        "route53:ListHostedZones",
+        "route53:ListTagsForResource"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Action": [
+        "autoscaling:DescribeAutoScalingInstances",
+        "ec2:DescribeInstanceTypes",
+        "ec2:DescribeInstances",
+        "ec2:DescribeRegions",
+        "ec2:DescribeVolumes",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:DescribeRepositories",
+        "ecr:GetAuthorizationToken",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:GetRepositoryPolicy",
+        "ecr:ListImages",
+        "iam:GetServerCertificate",
+        "iam:ListServerCertificates",
+        "kms:GenerateRandom"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ],
+  "Version": "2012-10-17"
+}
