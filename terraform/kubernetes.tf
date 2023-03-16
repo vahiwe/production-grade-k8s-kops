@@ -232,9 +232,9 @@ resource "aws_autoscaling_group" "nodes-us-east-1a-k8s-shadowinc-xyz" {
     version = aws_launch_template.nodes-us-east-1a-k8s-shadowinc-xyz.latest_version
   }
   max_instance_lifetime = 0
-  max_size              = 1
+  max_size              = 2
   metrics_granularity   = "1Minute"
-  min_size              = 1
+  min_size              = 2
   name                  = "nodes-us-east-1a.k8s.shadowinc.xyz"
   protect_from_scale_in = false
   tag {
@@ -277,9 +277,9 @@ resource "aws_autoscaling_group" "nodes-us-east-1b-k8s-shadowinc-xyz" {
     version = aws_launch_template.nodes-us-east-1b-k8s-shadowinc-xyz.latest_version
   }
   max_instance_lifetime = 0
-  max_size              = 1
+  max_size              = 2
   metrics_granularity   = "1Minute"
-  min_size              = 1
+  min_size              = 2
   name                  = "nodes-us-east-1b.k8s.shadowinc.xyz"
   protect_from_scale_in = false
   tag {
@@ -661,7 +661,7 @@ resource "aws_launch_template" "nodes-us-east-1a-k8s-shadowinc-xyz" {
     name = aws_iam_instance_profile.nodes-k8s-shadowinc-xyz.id
   }
   image_id      = "ami-0172070f66a8ebe63"
-  instance_type = "t3.small"
+  instance_type = "t3.xlarge"
   key_name      = aws_key_pair.kubernetes-k8s-shadowinc-xyz-b877467018e6823d0bccd4a66c8b3d65.id
   lifecycle {
     create_before_destroy = true
@@ -731,7 +731,7 @@ resource "aws_launch_template" "nodes-us-east-1b-k8s-shadowinc-xyz" {
     name = aws_iam_instance_profile.nodes-k8s-shadowinc-xyz.id
   }
   image_id      = "ami-0172070f66a8ebe63"
-  instance_type = "t3.small"
+  instance_type = "t3.xlarge"
   key_name      = aws_key_pair.kubernetes-k8s-shadowinc-xyz-b877467018e6823d0bccd4a66c8b3d65.id
   lifecycle {
     create_before_destroy = true
