@@ -162,6 +162,7 @@ kubeAPIServer:
   - ValidatingAdmissionWebhook
   - NodeRestriction
   - ResourceQuota
+  enableAggregatorRouting: true
   etcdServers:
   - https://127.0.0.1:4001
   etcdServersOverrides:
@@ -265,7 +266,7 @@ CloudProvider: aws
 ConfigBase: s3://kops-476621737173/k8s.shadowinc.xyz
 InstanceGroupName: control-plane-us-east-1a
 InstanceGroupRole: ControlPlane
-NodeupConfigHash: djjSfQSvm29PM1OZPdsqo6hKZhqanK6jv9JRsK9z5EM=
+NodeupConfigHash: W7YwQzjqMBm0vxtE1zOt9OPVXijn03duuAIud8+kmDI=
 
 __EOF_KUBE_ENV
 

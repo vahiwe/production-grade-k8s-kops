@@ -39,6 +39,14 @@ spec:
     selector:
       k8s-addon: dns-controller.addons.k8s.io
     version: 9.99.0
+  - id: k8s-1.11
+    manifest: metrics-server.addons.k8s.io/k8s-1.11.yaml
+    manifestHash: ad25beb6dd7f245793d022efb0d142ff72744cd28c1ff0c17e064db4379c9382
+    name: metrics-server.addons.k8s.io
+    needsPKI: true
+    selector:
+      k8s-app: metrics-server
+    version: 9.99.0
   - id: k8s-1.16
     manifest: certmanager.io/k8s-1.16.yaml
     manifestHash: 858ebb39a04d954adb75d7cac25093d0fde740fbad68a2a17fc4a4cd123aba2f

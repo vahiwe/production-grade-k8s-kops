@@ -169,6 +169,11 @@ Some updates might require a rolling update of the cluster. To do this, run the 
 kops rolling-update cluster --state ${KOPS_STATE_STORE} --name ${NAME} --yes
 ```
 
+The following addons have been installed on the cluster using kops managed addons:
+- [Metrics Server](https://kops.sigs.k8s.io/addons/#metrics-server)
+- [Cert Manager](https://kops.sigs.k8s.io/addons/#cert-manager)
+- [AWS Load Balancer Controller](https://kops.sigs.k8s.io/addons/#aws-load-balancer-controller)
+
 ## References
 - https://kops.sigs.k8s.io/getting_started/install/
 - [Kops Addons](https://kops.sigs.k8s.io/addons)

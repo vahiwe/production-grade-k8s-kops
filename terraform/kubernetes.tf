@@ -991,6 +991,13 @@ resource "aws_s3_object" "k8s-shadowinc-xyz-addons-limit-range-addons-k8s-io" {
   provider = aws.files
 }
 
+resource "aws_s3_object" "k8s-shadowinc-xyz-addons-metrics-server-addons-k8s-io-k8s-1-11" {
+  bucket   = "kops-476621737173"
+  content  = file("${path.module}/data/aws_s3_object_k8s.shadowinc.xyz-addons-metrics-server.addons.k8s.io-k8s-1.11_content")
+  key      = "k8s.shadowinc.xyz/addons/metrics-server.addons.k8s.io/k8s-1.11.yaml"
+  provider = aws.files
+}
+
 resource "aws_s3_object" "k8s-shadowinc-xyz-addons-networking-cilium-io-k8s-1-16" {
   bucket   = "kops-476621737173"
   content  = file("${path.module}/data/aws_s3_object_k8s.shadowinc.xyz-addons-networking.cilium.io-k8s-1.16_content")

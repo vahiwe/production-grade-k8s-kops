@@ -2,7 +2,7 @@ apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
   creationTimestamp: "2023-03-16T10:57:28Z"
-  generation: 3
+  generation: 4
   name: k8s.shadowinc.xyz
 spec:
   api:
@@ -89,6 +89,7 @@ spec:
     - ValidatingAdmissionWebhook
     - NodeRestriction
     - ResourceQuota
+    enableAggregatorRouting: true
     etcdServers:
     - https://127.0.0.1:4001
     etcdServersOverrides:
@@ -202,6 +203,9 @@ spec:
     shutdownGracePeriod: 30s
     shutdownGracePeriodCriticalPods: 10s
   masterPublicName: api.k8s.shadowinc.xyz
+  metricsServer:
+    enabled: true
+    insecure: false
   networkCIDR: 172.20.0.0/16
   networking:
     cilium:
