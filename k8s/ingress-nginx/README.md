@@ -1,29 +1,106 @@
 ## Deployment
-This addon configuration is gotten from the kops repository. This is the link to the [ingress-nginx](https://github.com/kubernetes/kops/tree/master/addons/ingress-nginx)
+The nginx-ingress-controller is deployed as a Deployment with a single replica. The Deployment is configured to run the nginx-ingress-controller container.
 
-### AWS
+More information about the nginx-ingress-controller can be found in the [official documentation](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/)
+
+In order for the ingress controller to be created successfully, the IAM role for the aws-cloud-controller-manager must have the following permissions:
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/ingress-nginx/v1.6.0.yaml
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "ec2:CreateTags",
+            "Condition": {
+                "StringEquals": {
+                    "ec2:CreateAction": [
+                        "CreateSecurityGroup"
+                    ]
+                }
+            },
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ec2:*:*:security-group/*"
+            ]
+        },
+        {
+            "Action": [
+                "ec2:CreateTags",
+                "ec2:DeleteTags"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:ec2:*:*:security-group/*"
+            ]
+        },
+        {
+            "Action": [
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeTags",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeInstances",
+                "ec2:DescribeRegions",
+                "ec2:DescribeRouteTables",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpcs",
+                "elasticloadbalancing:DescribeListeners",
+                "elasticloadbalancing:DescribeLoadBalancerAttributes",
+                "elasticloadbalancing:DescribeLoadBalancerPolicies",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "elasticloadbalancing:DescribeTargetHealth",
+                "kms:DescribeKey"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:DeleteSecurityGroup",
+                "ec2:ModifyInstanceAttribute",
+                "ec2:RevokeSecurityGroupIngress",
+                "elasticloadbalancing:AddTags",
+                "elasticloadbalancing:ApplySecurityGroupsToLoadBalancer",
+                "elasticloadbalancing:AttachLoadBalancerToSubnets",
+                "elasticloadbalancing:ConfigureHealthCheck",
+                "elasticloadbalancing:CreateLoadBalancerListeners",
+                "elasticloadbalancing:CreateLoadBalancerPolicy",
+                "elasticloadbalancing:DeleteListener",
+                "elasticloadbalancing:DeleteLoadBalancer",
+                "elasticloadbalancing:DeleteLoadBalancerListeners",
+                "elasticloadbalancing:DeleteTargetGroup",
+                "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                "elasticloadbalancing:DeregisterTargets",
+                "elasticloadbalancing:DetachLoadBalancerFromSubnets",
+                "elasticloadbalancing:ModifyListener",
+                "elasticloadbalancing:ModifyLoadBalancerAttributes",
+                "elasticloadbalancing:ModifyTargetGroup",
+                "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                "elasticloadbalancing:RegisterTargets",
+                "elasticloadbalancing:SetLoadBalancerPoliciesForBackendServer",
+                "elasticloadbalancing:SetLoadBalancerPoliciesOfListener"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "ec2:CreateSecurityGroup",
+                "elasticloadbalancing:CreateListener",
+                "elasticloadbalancing:CreateLoadBalancer",
+                "elasticloadbalancing:CreateTargetGroup"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": "ec2:CreateSecurityGroup",
+            "Effect": "Allow",
+            "Resource": "arn:aws:ec2:*:*:vpc/*"
+        }
+    ]
+}
 ```
 
-### GCE
-```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/kops/master/addons/ingress-nginx/v1.6.0-gce.yaml
-```
-
-## Creating a simple ingress
-
-```
-kubectl run echoheaders --image=registry.k8s.io/echoserver:1.4 --replicas=1 --port=8080
-kubectl expose deployment echoheaders --port=80 --target-port=8080 --name=echoheaders-x
-kubectl expose deployment echoheaders --port=80 --target-port=8080 --name=echoheaders-y
-
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/contrib/master/ingress/controllers/nginx/examples/ingress.yaml
-
-kubectl get services ingress-nginx -owide
-
-NAME            CLUSTER-IP      EXTERNAL-IP                                                               PORT(S)          AGE       SELECTOR
-ingress-nginx   100.71.196.44   a29c28f4b8b0811e685cb0a924c5a8a1-1593015597.us-east-1.elb.amazonaws.com   80/TCP,443/TCP   13m       app=ingress-nginx
-
-curl -v -H "Host: bar.baz.com" http://a29c28f4b8b0811e685cb0a924c5a8a1-1593015597.us-east-1.elb.amazonaws.com/bar
-```
+This had to be added manually to the role, as there was no way to use the kops cluster spec to add these permissions.
