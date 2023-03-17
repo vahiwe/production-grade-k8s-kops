@@ -4,7 +4,5 @@ terraform {
     key    = "kops/terraform.tfstate"
     region = "us-east-1"
     dynamodb_table = "kops-terraform-state-lock"
-    shared_credentials_file = "~/.aws/credentials"
-    profile = "kops"
   }
 }

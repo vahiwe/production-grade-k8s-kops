@@ -40,3 +40,48 @@ jobs:
           kubectl version --client
           kops version
           aws --version
+
+      - name: Kops import cluster via manifest
+        run: |
+          export KOPS_STATE_STORE=$(cat kops/k8s.shadowinc.xyz.yaml | grep configBase | awk '{print $2}')
+          kops replace --force -f kops/k8s.shadowinc.xyz.yaml
+
+      - name: Kops create kubeconfig
+        run: |
+          export KOPS_STATE_STORE=$(cat kops/k8s.shadowinc.xyz.yaml | grep configBase | awk '{print $2}')
+          kops export kubeconfig --state $KOPS_STATE_STORE --name k8s.shadowinc.xyz --admin
+
+      - name: Kops validate cluster
+        run: |
+          export KOPS_STATE_STORE=$(cat kops/k8s.shadowinc.xyz.yaml | grep configBase | awk '{print $2}')
+          kops validate cluster --state $KOPS_STATE_STORE --name k8s.shadowinc.xyz
+
+      - name: Kops update cluster dry-run
+        run: |
+          export KOPS_STATE_STORE=$(cat kops/k8s.shadowinc.xyz.yaml | grep configBase | awk '{print $2}')
+          kops update cluster --state $KOPS_STATE_STORE --name k8s.shadowinc.xyz
+
+      - name: Kops rolling update dry-run
+        run: |
+          export KOPS_STATE_STORE=$(cat kops/k8s.shadowinc.xyz.yaml | grep configBase | awk '{print $2}')
+          kops rolling-update cluster --state $KOPS_STATE_STORE --name k8s.shadowinc.xyz
+
+      - name: Terraform init
+        run: |
+          cd terraform
+          terraform init
+
+      - name: Terraform validate
+        run: |
+          cd terraform
+          terraform validate
+
+      - name: Terraform plan
+        run: |
+          cd terraform
+          terraform plan
+
+      - name: Terraform apply
+        run: |
+          cd terraform
+          terraform apply -auto-approve
