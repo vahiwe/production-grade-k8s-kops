@@ -54,7 +54,7 @@ kubectl apply -f manifests-monitoring
 ```
 Please note that deploying some components might require extra setup, such as configuring AWS credentials for the ELB setup. Make sure to read the individual READMEs for more information.
 
-## Reaching the Application
+## Ingress
 The Sock Shop application, grafana, and kibana are exposed via ingress. To reach the application, get the `EXTERNAL-IP` of the ELB created by the ingress-nginx setup:
 
 ```bash
@@ -66,6 +66,13 @@ A Wild Card DNS entry has to be created to point to the `EXTERNAL-IP` of the ELB
 Make changes to the ingress rules in `10-default-backend-ingress.yaml`, `23-grafana-ingress.yaml`, `11-front-end-ingress.yaml` and `kibana-ingress.yaml` to change the subdomain and domain.
 
 Make sure to update the `07-loadbalancer-aws-elb.yaml` file to use the correct Certificate ARN and security group.
+
+### Ingress Endpoints
+The following endpoints are exposed via ingress:
+- `http://front.<subdomain>.<domain>`: Sock Shop application
+- `http://grafana.<subdomain>.<domain>`: Grafana dashboard
+- `http://kibana.<subdomain>.<domain>`: Kibana dashboard
+- `http://default.<subdomain>.<domain>`: Default backend
 
 ## Cleanup
 To clean up the setup, delete the manifests in each directory sequentially:
