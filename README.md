@@ -1,8 +1,10 @@
 # Sock Shop on Kubernetes
 This repository contains Terraform and Kubernetes manifests required to deploy and maintain a sample application and its supporting infrastructure. The application is a microservices-based e-commerce platform called "Sock Shop". The repository is divided into two main directories:
 
+- `.github`: Contains GitHub Actions workflows for CI/CD.
 - `k8s`: Contains Kubernetes manifests for setting up the application, ingress controller, logging, and monitoring components.
 - `terraform`: Contains Terraform manifests for provisioning the underlying infrastructure.
+- `kops`: Contains Kops manifests file for the cluster
 
 ## Directory Structure
 
@@ -34,7 +36,7 @@ terraform init
 
 Refer to the `kubernetes.tf` file to view the output of Kops generated Terraform manifests.
 
-Once the variables are set, review the proposed changes with `terraform plan` and apply them with `terraform apply`:
+Review the proposed changes with `terraform plan` and apply them with `terraform apply`:
 ```bash
 terraform plan
 terraform apply
@@ -54,6 +56,23 @@ kubectl apply -f k8s/manifests-monitoring
 ```
 
 Please note that deploying some components might require extra setup, such as configuring AWS credentials for the ELB setup. Make sure to read the individual READMEs in the `k8s` subdirectories for more information.
+
+## CI/CD
+The CI/CD for this project is done using [Github Actions](https://docs.github.com/en/actions). The file that contains the CI/CD workflow is [here](.github/workflows/deploy.yml). It's triggered manually via the `workflow_dispatch` event.
+
+### Prerequisites for CI/CD
+1. An AWS account with the required permissions for deploying infrastructure.
+2. Repository secrets for AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.
+
+### CI/CD Usage and Workflow
+To trigger the workflow manually, go to the "Actions" tab in your GitHub repository and click on the "Infrastructure Deployment" workflow. Click "Run workflow" and confirm to start the deployment.
+
+This action will perform the following steps:
+1. Set up the required tools and AWS credentials.
+2. Deploy the Kops cluster using the provided configuration.
+3. Deploy the Terraform infrastructure.
+4. Apply Kubernetes manifests for ingress, applications, logging, and monitoring.
+
 
 ## Endpoints
 Once the deployment is complete, you can access the following endpoints:
