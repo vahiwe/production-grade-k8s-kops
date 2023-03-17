@@ -31,10 +31,8 @@ metadata:
     name: kibana
   namespace: kube-system
 spec:
-  type: NodePort
   ports:
-  - port: 5601
+  - port: 80
     targetPort: 5601
-    nodePort: 31601
   selector:
     name: kibana
