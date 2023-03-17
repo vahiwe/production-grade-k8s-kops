@@ -1,0 +1,182 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: "2023-03-16T10:57:28Z"
+  generation: 9
+  name: k8s.shadowinc.xyz
+spec:
+  additionalPolicies:
+    master: |
+      [
+        {
+          "Effect": "Allow",
+          "Action": "iam:CreateServiceLinkedRole",
+          "Resource": "arn:aws:iam::*:role/aws-service-role/*"
+         },
+         {
+           "Effect": "Allow",
+           "Action": [
+              "elasticloadbalancing:*"
+            ],
+           "Resource": "*"
+         }
+      ]
+  api:
+    dns: {}
+  authorization:
+    rbac: {}
+  awsLoadBalancerController:
+    enabled: true
+  certManager:
+    enabled: true
+    hostedZoneIDs:
+    - Z06352133LLCSB2NKX1D5
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://kops-476621737173/k8s.shadowinc.xyz
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1a
+      name: a
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: control-plane-us-east-1a
+      name: a
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+    useServiceAccountExternalPermissions: true
+  kubeProxy:
+    enabled: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  kubernetesVersion: 1.26.2
+  masterPublicName: api.k8s.shadowinc.xyz
+  metricsServer:
+    enabled: true
+    insecure: false
+  networkCIDR: 172.20.0.0/16
+  networking:
+    cilium:
+      enableNodePort: true
+  nodePortAccess:
+  - 0.0.0.0/0
+  nonMasqueradeCIDR: 100.64.0.0/10
+  serviceAccountIssuerDiscovery:
+    discoveryStore: s3://kops-476621737173/k8s.shadowinc.xyz/discovery/k8s.shadowinc.xyz
+    enableAWSOIDCProvider: true
+  sshAccess:
+  - 52.203.245.53/32
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: us-east-1a
+    type: Public
+    zone: us-east-1a
+  - cidr: 172.20.64.0/19
+    name: us-east-1b
+    type: Public
+    zone: us-east-1b
+  - cidr: 172.20.96.0/19
+    name: us-east-1c
+    type: Public
+    zone: us-east-1c
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2023-03-16T10:57:30Z"
+  labels:
+    kops.k8s.io/cluster: k8s.shadowinc.xyz
+  name: control-plane-us-east-1a
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20230302
+  instanceMetadata:
+    httpPutResponseHopLimit: 1
+    httpTokens: required
+  machineType: t3.medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2023-03-16T10:57:31Z"
+  generation: 1
+  labels:
+    kops.k8s.io/cluster: k8s.shadowinc.xyz
+  name: nodes-us-east-1a
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20230302
+  instanceMetadata:
+    httpPutResponseHopLimit: 1
+    httpTokens: required
+  machineType: t3.xlarge
+  maxSize: 2
+  minSize: 2
+  role: Node
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2023-03-16T10:57:31Z"
+  generation: 1
+  labels:
+    kops.k8s.io/cluster: k8s.shadowinc.xyz
+  name: nodes-us-east-1b
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20230302
+  instanceMetadata:
+    httpPutResponseHopLimit: 1
+    httpTokens: required
+  machineType: t3.xlarge
+  maxSize: 2
+  minSize: 2
+  role: Node
+  subnets:
+  - us-east-1b
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2023-03-16T10:57:32Z"
+  labels:
+    kops.k8s.io/cluster: k8s.shadowinc.xyz
+  name: nodes-us-east-1c
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20230302
+  instanceMetadata:
+    httpPutResponseHopLimit: 1
+    httpTokens: required
+  machineType: t3.small
+  maxSize: 0
+  minSize: 0
+  role: Node
+  subnets:
+  - us-east-1c

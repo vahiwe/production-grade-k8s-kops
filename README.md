@@ -32,7 +32,7 @@ cd terraform
 terraform init
 ```
 
-Now, create a `terraform.tfvars` file containing the required variables. Refer to the `data` subdirectory for variable definitions.
+Refer to the `kubernetes.tf` file to view the output of Kops generated Terraform manifests.
 
 Once the variables are set, review the proposed changes with `terraform plan` and apply them with `terraform apply`:
 ```bash
