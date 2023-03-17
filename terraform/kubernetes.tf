@@ -1224,24 +1224,6 @@ resource "aws_security_group_rule" "from-nodes-k8s-shadowinc-xyz-ingress-udp-1to
   type                     = "ingress"
 }
 
-resource "aws_security_group_rule" "nodeport-tcp-external-to-node-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 30000
-  protocol          = "tcp"
-  security_group_id = aws_security_group.nodes-k8s-shadowinc-xyz.id
-  to_port           = 32767
-  type              = "ingress"
-}
-
-resource "aws_security_group_rule" "nodeport-udp-external-to-node-0-0-0-0--0" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 30000
-  protocol          = "udp"
-  security_group_id = aws_security_group.nodes-k8s-shadowinc-xyz.id
-  to_port           = 32767
-  type              = "ingress"
-}
-
 resource "aws_subnet" "us-east-1a-k8s-shadowinc-xyz" {
   availability_zone                           = "us-east-1a"
   cidr_block                                  = "172.20.32.0/19"
