@@ -5,3 +5,4 @@ metadata:
   namespace: nginx-ingress
 data:
   default-server-return: 302 http://default.k8s.shadowinc.xyz
+  redirect-to-https: "True"
