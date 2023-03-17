@@ -159,6 +159,19 @@ You can also delete the cluster using the kops command:
 kops delete cluster --state ${KOPS_STATE_STORE} --name ${NAME} --yes
 ```
 
+## Troubleshooting
+- If you run into any issues, you can check the logs for the cluster by running the following command:
+```bash
+ssh -i ~/.ssh/kops ubuntu@api.<subdomain>.<domain>
+```
+Replace `<subdomain>` and `<domain>` with the subdomain and domain you used for the cluster.
+The username can be changed if Ubuntu is not the default OS for the cluster.
+
+- If you start getting errors about authorization when running kubectl commands, you can run the following command to fix it:
+```bash
+kops export kubeconfig <subdomain>.<domain> --admin
+```
+
 ## Addons
 Kops has a number of addons that can be installed on the cluster.
 To install an addon, run the following command, go to the [Kops Addons](https://kops.sigs.k8s.io/addons) page, and find the addon you want to install.
@@ -173,6 +186,11 @@ The following addons have been installed on the cluster using kops managed addon
 - [Metrics Server](https://kops.sigs.k8s.io/addons/#metrics-server)
 - [Cert Manager](https://kops.sigs.k8s.io/addons/#cert-manager)
 - [AWS Load Balancer Controller](https://kops.sigs.k8s.io/addons/#aws-load-balancer-controller)
+
+You can view the addons installed on the cluster by running the following command:
+```bash
+kops toolbox addons list
+```
 
 ## References
 - https://kops.sigs.k8s.io/getting_started/install/
