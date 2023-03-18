@@ -36,10 +36,10 @@ jobs:
 
       - name: View versions of tools
         run: |
-          terraform version
-          kubectl version --client
-          kops version
-          aws --version
+          echo "Terraform version: $(terraform version)"
+          echo "Kubectl version: $(kubectl version --short)"
+          echo "Kops version: $(kops version)"
+          echo "AWS CLI version: $(aws --version)"
 
       - name: Kops import cluster via manifest
         run: |
