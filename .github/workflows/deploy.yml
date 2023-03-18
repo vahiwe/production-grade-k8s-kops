@@ -68,6 +68,11 @@ jobs:
         run: |
           kops rolling-update cluster --state ${{env.kops_state_store}} --name k8s.shadowinc.xyz
 
+      - name: Kops Output Terraform Updated Configuration Files
+        run: |
+          cd terraform
+          kops update cluster --state ${{env.kops_state_store}} --name k8s.shadowinc.xyz --out=. --target=terraform
+
       - name: Terraform init
         run: |
           cd terraform
